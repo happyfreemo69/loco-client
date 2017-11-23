@@ -1,0 +1,11 @@
+{
+    "name": "loco-client",
+    "version": "0.0.1",
+    "description": "list some loco endpoint",
+    "author": "mpech",
+    "private": true,
+    "dependencies": {
+        "optimist": "0.6.1"
+    },
+    "license": "MIT"
+}
