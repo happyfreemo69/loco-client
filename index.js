@@ -1,1 +1,1 @@
-module.exports = require('./loco');
+module.exports = require('./apicli');

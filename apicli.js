@@ -100,108 +100,13 @@ exports.createTranslation = function(o, body, locale){
 exports.createAsset = function(o, body){
     return _post(o, '/api/assets', body);
 }
-
+exports.getAsset = function(o, id){
+    return _get(o, '/api/assets/'+id);
+}
 exports.getLocales = function(o){
     return _get(o, '/api/locales');
 }
 
 exports.getExport = function(o, locale){
     return _get(o, '/api/export/locale/'+locale+'.json?format=i18next');
-}
-
-if(!module.parent){
-    var optimist = require('optimist')
-        .usage(
-`translating: 
-translate:
-    node loco.js -t idToTranslate -l fr
-
-create asset:
-    node loco.js -c -b id
-
-create translation for asset
-    node loco.js -c -t idToTranslate -l fr -b data
-
-exporting:
-    
-    node loco.js -e -l fr
-
-listing all locales:
-
-    node loco.js --list-locales`)
-        .options('t', {
-            alias : 'translate',
-            describe: 'translate the id'
-        })
-        .options('c', {
-            alias : 'create',
-            describe: 'create a translation'
-        })
-        .options('l', {
-            alias : 'locale',
-            describe: 'for the given locale'
-        })
-        .options('e', {
-            alias : 'export',
-            describe: 'or exports'
-        })
-        .options('a', {
-            alias : 'list-locales',
-            describe: 'list all existing locales'
-        })
-        .options('b', {
-            alias : 'body',
-            describe: 'data for the translation'
-        })
-    var argv = optimist.argv;
-    if(argv.help){
-        optimist.showHelp()
-        process.exit(0);
-    }
-    if(!process.env.LOCO_APIKEY){
-        throw 'missing export LOCO_APIKEY=something';
-    }
-    const cred = {loco_apiKey: process.env.LOCO_APIKEY};
-    if(!argv.t && !argv.e && !argv.a && !argv.c){
-        optimist.showHelp()
-        process.exit(0);   
-    }
-
-    if(argv.c){
-        if(argv.t){
-            if(!argv.locale){
-                throw 'expect locale';
-            }
-            if(!argv.body){
-                throw 'expect body';
-            }
-            return exports.createTranslation(cred, {id:argv.t, name:argv.body}, argv.locale).then(x=>{
-                console.log(JSON.stringify(x,null,1));
-            })
-        }
-
-        return exports.createAsset(cred, {id:argv.body, name:argv.body}).then(x=>{
-            console.log(JSON.stringify(x,null,1));
-        })
-    }
-
-    if(argv.t){
-        if(!argv.l){
-            throw 'expect locale';
-        }
-        return exports.getTranslation(cred, argv.t, argv.locale).then(x=>{
-            console.log(JSON.stringify(x,null,1));
-        })
-    }
-    if(argv.e){
-        if(!argv.l){
-            throw 'expect locale';
-        }
-        return exports.getExport(cred, argv.locale).then(x=>{
-            console.log('x', x);
-        })
-    }
-    return exports.getLocales(cred).then(x=>{
-        console.log(JSON.stringify(x,null,1))
-    })
 }
