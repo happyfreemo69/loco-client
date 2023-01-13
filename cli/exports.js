@@ -1,7 +1,7 @@
 #!/usr/bin/node
 var api = require('../apicli');
 
-var optimist = require('optimist').usage(
+var optimist = require('yargs').usage(
     `$0 -l locale
     `).options('l', {
         alias : 'locale',
